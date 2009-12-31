@@ -43,7 +43,6 @@ QSerialPort::QSerialPort(QString filename, QObject *parent) : QIODevice(parent),
                                                               m_handle(-1)
                                                               #endif
 {
-  qWarning("QSerialPort");
 }
 
 QSerialPort::~QSerialPort()
@@ -200,7 +199,6 @@ qint64 QSerialPort::readData(char *data, qint64 maxSize)
 
 qint64 QSerialPort::writeData(const char *data, qint64 maxSize)
 {
-  qWarning("writeData size=%d", maxSize);
 #ifdef WIN32
     if(m_handle != INVALID_HANDLE_VALUE) {
         DWORD write_count;

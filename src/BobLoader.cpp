@@ -88,8 +88,6 @@ bool BobLoader::downloadFirmware(QString port)
   
   QSerialPort serialPort(port);
   
-  qWarning("port=%s", qPrintable(port));
-  
   if(!serialPort.open(QIODevice::ReadWrite)) {
     m_failMessage = "Failed to open serial port.";
     return false;
@@ -106,7 +104,6 @@ bool BobLoader::downloadFirmware(QString port)
   
   data = QByteArray("WR", 2) + m_firmwareImage.read(256);
   while(data.size() > 2) {
-    qWarning("data.size=%d", data.size());
     progress.setValue(progress.value() + data.size()-2);
     data.append(QByteArray(258-data.size(), 0));
     crc = qToLittleEndian<quint32>(::crc32((const unsigned char*)data.constData(), 258));
@@ -114,7 +111,6 @@ bool BobLoader::downloadFirmware(QString port)
     
     ret.clear();
     while(ret != ok) {
-      qWarning("Writing data");
       serialPort.write(data);
       
       if(progress.wasCanceled()) {
@@ -122,7 +118,6 @@ bool BobLoader::downloadFirmware(QString port)
         return false;
       }
       
-      qWarning("Waiting for reply");
       while(ret.size() < 2) {
         if(progress.wasCanceled()) {
           m_failMessage = "Download Canceled";
