@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/" >
+    <file>firmware_version</file>
+    <file>firmware</file>
+  </qresource>
+</RCC>
