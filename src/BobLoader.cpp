@@ -73,10 +73,8 @@ QStringList BobLoader::getAvailablePorts()
       portList << portName;
     }
   }
-#elif  Q_OS_MAC
-  portList = QDir("/dev").entryList(QStringList()<<"tty.usbmodem*");
-#else /*Q_OS_LINUX*/
-  portList = QDir("/dev").entryList(QStringList()<<"ttyUSB*"<<"ttyACM*");
+#else
+  portList = QDir("/dev").entryList(QStringList()<<"ttyUSB*"<<"ttyACM*"<<"tty.usbmodem*", QDir::System);
 #endif
 
   return portList;

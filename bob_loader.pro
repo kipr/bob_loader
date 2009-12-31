@@ -9,6 +9,8 @@ TARGET =
 DEPENDPATH += . src ui
 INCLUDEPATH += . src ui
 
+CONFIG += x86
+
 # Input
 HEADERS += src/crc32.h src/BobLoader.h src/QSerialPort.h
 FORMS += ui/BobLoader.ui
