@@ -40,9 +40,7 @@ void BobLoader::on_ui_DownloadButton_clicked(bool)
 {
   QString port = ui_PortList->currentText();
   
-#ifdef Q_OS_WIN32
-  port = "\\\\.\\" + port;
-#else
+#ifndef Q_OS_WIN32
   port = "/dev/" + port;
 #endif
 
