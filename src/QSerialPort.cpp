@@ -64,9 +64,9 @@ bool QSerialPort::open(OpenMode)
     if(m_handle == INVALID_HANDLE_VALUE)
             return false;
             
-    cto.ReadIntervalTimeout = 500;
+    cto.ReadIntervalTimeout = 0;
     cto.ReadTotalTimeoutMultiplier = 0;
-    cto.ReadTotalTimeoutConstant = 500;
+    cto.ReadTotalTimeoutConstant = 1;
     cto.WriteTotalTimeoutMultiplier = 0;
     cto.WriteTotalTimeoutConstant = 0;
     
@@ -177,12 +177,9 @@ qint64 QSerialPort::readData(char *data, qint64 maxSize)
 #ifdef WIN32
     if(m_handle != INVALID_HANDLE_VALUE) {
         DWORD read_count = 0;
-        qWarning("ReadFile...");
         if(!ReadFile(m_handle, data, maxSize, &read_count, NULL)) {
-            qWarning("Readfile failed...");
             return 0;
         }
-            qWarning("Readfile returned %d", read_count);
         return read_count;
     }
 #else

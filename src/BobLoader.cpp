@@ -137,5 +137,5 @@ bool BobLoader::downloadFirmware(QString port)
   serialPort.write(ok);
   ret = serialPort.read(2);
   
-  return ret == QByteArray("DC", 2)
+  return ret == QByteArray("DC", 2);
 }
