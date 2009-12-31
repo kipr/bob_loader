@@ -58,9 +58,9 @@ QStringList BobLoader::getAvailablePorts()
 #ifdef Q_OS_WIN32
   COMMTIMEOUTS cto;
   cto.ReadIntervalTimeout = MAXDWORD;
-  cto.ReadTotalTimeoutMultiplier = 0
+  cto.ReadTotalTimeoutMultiplier = 0;
   cto.ReadTotalTimeoutConstant = 0;
-  cto.WriteTotalTimeoutMultiplier = 0
+  cto.WriteTotalTimeoutMultiplier = 0;
   cto.WriteTotalTimeoutConstant = 0;
   
   for(int i = 1;i < 32;i++) {
