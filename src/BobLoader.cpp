@@ -9,6 +9,10 @@
 
 #include "QSerialPort.h"
 
+#ifdef Q_OS_WIN32
+#include <windows.h>
+#endif
+
 BobLoader::BobLoader(QWidget *parent) : QWidget(parent), m_firmwareImage(":/firmware")
 {
   setupUi(this);
