@@ -109,7 +109,11 @@ bool BobLoader::downloadFirmware(QString port)
     progress.setValue(progress.value() + data.size()-2);
     data.append(QByteArray(258-data.size(), 0));
     crc = qToLittleEndian<quint32>(::crc32((const unsigned char*)data.constData(), 258));
-    data.append((const char *)&crc, 4);
+    //FUGLY HACK TO MAKE QT 4.4 WORK
+    data.append(((const char *)&crc)[0]);
+    data.append(((const char *)&crc)[1]);
+    data.append(((const char *)&crc)[2]);
+    data.append(((const char *)&crc)[3]);
     
     ret.clear();
     while(ret != ok) {
