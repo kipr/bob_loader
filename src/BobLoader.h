@@ -20,7 +20,6 @@ public slots:
   
 private:
   QString m_firmwareVersion;
-  QFile m_firmwareImage;
   QString m_failMessage;
   
   QStringList getAvailablePorts();

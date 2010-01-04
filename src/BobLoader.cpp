@@ -4,6 +4,7 @@
 #include <QProgressDialog>
 #include <QtEndian>
 #include <QMessageBox>
+#include <QFileDialog>
 
 #include "crc32.h"
 
@@ -13,7 +14,7 @@
 #include <windows.h>
 #endif
 
-BobLoader::BobLoader(QWidget *parent) : QWidget(parent), m_firmwareImage(":/firmware")
+BobLoader::BobLoader(QWidget *parent) : QWidget(parent)
 {
   setupUi(this);
   
@@ -24,8 +25,6 @@ BobLoader::BobLoader(QWidget *parent) : QWidget(parent), m_firmwareImage(":/firm
   ui_FirmwareVersion->setText(m_firmwareVersion);
   
   on_ui_RefreshButton_clicked();
-  
-  Q_ASSERT(m_firmwareImage.open(QIODevice::ReadOnly));
 }
 
 BobLoader::~BobLoader()
@@ -84,27 +83,32 @@ QStringList BobLoader::getAvailablePorts()
 
 bool BobLoader::downloadFirmware(QString port)
 {
-  QProgressDialog progress("Downloading Firmware...", "Abort Download", 0, m_firmwareImage.size(), this);
-  progress.setMinimumDuration(0);
-  progress.setWindowModality(Qt::WindowModal);
-  
+  QFile firmware(":/firmware");
   QSerialPort serialPort(port);
   
   if(!serialPort.open(QIODevice::ReadWrite)) {
     m_failMessage = "Failed to open serial port.";
     return false;
   }
-  if(!m_firmwareImage.reset()) {
-    m_failMessage = "Corrupted firmware image, download new BoB Loader";
-    return false;
+  
+  if(!firmware.open(QIODevice::ReadOnly)) {
+    firmware.setFileName(QFileDialog::getOpenFileName(this, "Select Firmware Image"));
+    if(!firmware.open(QIODevice::ReadOnly)) {
+      m_failMessage = "No firmware image specified";
+      return false;
+    }
   }
+  
+  QProgressDialog progress("Downloading Firmware...", "Abort Download", 0, firmware.size(), this);
+  progress.setMinimumDuration(0);
+  progress.setWindowModality(Qt::WindowModal);
   
   quint32 crc;
   QByteArray data;
   QByteArray ok = QByteArray("OK", 2);
   QByteArray ret;
   
-  data = QByteArray("WR", 2) + m_firmwareImage.read(256);
+  data = QByteArray("WR", 2) + firmware.read(256);
   while(data.size() > 2) {
     progress.setValue(progress.value() + data.size()-2);
     data.append(QByteArray(258-data.size(), 0));
@@ -133,7 +137,7 @@ bool BobLoader::downloadFirmware(QString port)
       }
     }
     
-    data = QByteArray("WR", 2) + m_firmwareImage.read(256);
+    data = QByteArray("WR", 2) + firmware.read(256);
   }
   
   serialPort.write(ok);
