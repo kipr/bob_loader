@@ -24,6 +24,8 @@ BobLoader::BobLoader(QWidget *parent) : QWidget(parent), m_firmwareImage(":/firm
   ui_FirmwareVersion->setText(m_firmwareVersion);
   
   on_ui_RefreshButton_clicked();
+  
+  Q_ASSERT(m_firmwareImage.open(QIODevice::ReadOnly));
 }
 
 BobLoader::~BobLoader()
@@ -92,7 +94,7 @@ bool BobLoader::downloadFirmware(QString port)
     m_failMessage = "Failed to open serial port.";
     return false;
   }
-  if(!m_firmwareImage.open(QIODevice::ReadOnly)) {
+  if(!m_firmwareImage.reset()) {
     m_failMessage = "Corrupted firmware image, download new BoB Loader";
     return false;
   }

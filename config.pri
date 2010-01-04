@@ -6,3 +6,5 @@ UI_DIR = build/ui
 RCC_DIR = build/rcc
 
 QMAKE_DISTCLEAN += build/obj build/moc build/ui build/rcc build
+
+QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.5.sdk
