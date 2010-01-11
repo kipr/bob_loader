@@ -16,4 +16,4 @@ HEADERS += src/crc32.h src/BobLoader.h src/QSerialPort.h
 FORMS += ui/BobLoader.ui
 SOURCES += src/crc32.cpp src/BobLoader.cpp src/main.cpp src/QSerialPort.cpp
 
-RESOURCES += firmware.qrc
+#RESOURCES += firmware.qrc
