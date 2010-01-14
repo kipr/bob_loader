@@ -120,6 +120,15 @@ bool BobLoader::downloadFirmware(QString port)
     data.append(((const char *)&crc)[3]);
     
     ret.clear();
+    serialPort.write(data);
+    while(ret.size() < 2)
+      ret += serialPort.read(2-ret.size());
+    
+    if(ret != ok)  {
+      m_failMessage = "Download failed, please retry from step 1";
+      return false;
+    }
+    /*
     while(ret != ok) {
       serialPort.write(data);
       
@@ -135,7 +144,7 @@ bool BobLoader::downloadFirmware(QString port)
         }
         ret += serialPort.read(2-ret.size());
       }
-    }
+    }*/
     
     data = QByteArray("WR", 2) + firmware.read(256);
   }
